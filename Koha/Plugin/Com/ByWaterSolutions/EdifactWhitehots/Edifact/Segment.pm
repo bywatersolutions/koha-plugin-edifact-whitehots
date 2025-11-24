@@ -94,13 +94,23 @@ sub as_string {
 
 # parse a string into fields
 sub _parse_seg {
-    my $s = shift;
-    my $e = {
+    my $s = shift // q{};
+    $s =~ s/\R//g;
+    $s =~ s/^\s+|\s+$//g;
 
-        #        raw => $s,
-        tag      => substr( $s,                0, 3 ),
-        elem_arr => _get_elements( substr( $s, 3 ) ),
+    return {
+        tag      => q{},
+        elem_arr => [],
+    } if $s eq q{};
+
+    my $tag  = substr( $s, 0, 3 );
+    my $rest = length($s) > 3 ? substr( $s, 3 ) : q{};
+
+    my $e = {
+        tag      => $tag,
+        elem_arr => _get_elements($rest),
     };
+
     return $e;
 }
 
@@ -109,7 +119,10 @@ sub _parse_seg {
 #
 
 sub _get_elements {
-    my $seg = shift;
+    my $seg = shift // q{};
+
+    # If there's nothing to parse, just return an empty arrayref
+    return [] if $seg eq q{};
 
     $seg =~ s/^[+]//;    # dont start with a dummy element`
     my @elem_array = map { _components($_) } split /(?<![?])[+]/, $seg;
