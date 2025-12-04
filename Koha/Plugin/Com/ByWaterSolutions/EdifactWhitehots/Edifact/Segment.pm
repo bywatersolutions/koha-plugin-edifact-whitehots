@@ -26,6 +26,7 @@ sub new {
     my $self = {};
     if ( $parm_ref->{seg_string} ) {
         $self = _parse_seg( $parm_ref->{seg_string} );
+        $self = $parsed if $parsed;
     }
 
     bless $self, $class;

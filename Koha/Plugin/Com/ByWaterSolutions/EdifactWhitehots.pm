@@ -24,7 +24,7 @@ use Koha::EDI;
 use Koha::Items;
 
 ## Here we set our plugin version
-our $VERSION = "3.8.26";
+our $VERSION = "{version}";
 
 ## Here is our metadata, some keys are required, some are optional
 our $metadata = {
@@ -32,7 +32,7 @@ our $metadata = {
     author          => 'Kyle M Hall',
     description     => 'Edifact plugin for Whitehots',
     date_authored   => '2015-12-21',
-    date_updated    => '2025-11-24',
+    date_updated    => '2025-12-04',
     minimum_version => '22.05.06',
     maximum_version => undef,
     version         => $VERSION,
