@@ -98,10 +98,7 @@ sub _parse_seg {
     $s =~ s/\R//g;
     $s =~ s/^\s+|\s+$//g;
 
-    return {
-        tag      => q{},
-        elem_arr => [],
-    } if $s eq q{};
+    return if length($s) < 3;
 
     my $tag  = substr( $s, 0, 3 );
     my $rest = length($s) > 3 ? substr( $s, 3 ) : q{};
