@@ -1,14 +1,14 @@
 {
-  "name": "koha-plugin-edifact-enhanced",
-  "version": "4.0.7",
-  "description": "Koha Edifact Enhanced Plugin",
+  "name": "koha-plugin-edifact-whitehots",
+  "version": "4.0.1",
+  "description": "Koha Edifact Plugin - Whitehots",
   "devDependencies": {
     "gulp": "^4.0.2",
     "gulp-cli": "^3.0.0",
     "vinyl": "^3.0.0"
   },
   "scripts": {
-    "preversion": "sed -i -e \"s/^our \\$VERSION = .*/our \\$VERSION = \\\"$npm_new_version\\\";/\" Koha/Plugin/Com/ByWaterSolutions/EdifactEnhanced.pm; git add -u; rm -f Koha/Plugin/Com/ByWaterSolutions/EdifactEnhanced.pm-e",
+    "preversion": "sed -i -e \"s/^our \\$VERSION = .*/our \\$VERSION = \\\"$npm_new_version\\\";/\" Koha/Plugin/Com/ByWaterSolutions/EdifactWhitehots.pm; git add -u; rm -f Koha/Plugin/Com/ByWaterSolutions/EdifactWhitehots.pm-e",
     "test": "echo \"Error: no test specified\" && exit 1",
     "kpz": "node -e \"console.log(process.env.npm_package_name + '-v' + process.env.npm_package_version + '.kpz')\"",
     "print-name": "node -e \"console.log(process.env.npm_package_name)\"",
@@ -16,14 +16,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bywatersolutions/koha-plugin-edifact-enhanced.git"
+    "url": "git+https://github.com/bywatersolutions/koha-plugin-edifact-whitehots.git"
   },
   "author": "Kyle M Hall <kyle@bywatersolutions.com>",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/bywatersolutions/koha-plugin-edifact-enhanced/issues"
+    "url": "https://github.com/bywatersolutions/koha-plugin-edifact-whitehots/issues"
   },
-  "homepage": "https://github.com/bywatersolutions/koha-plugin-edifact-enhanced#readme",
+  "homepage": "https://github.com/bywatersolutions/koha-plugin-edifact-whitehots#readme",
   "dependencies": {
     "node-datetime": "^2.0.0"
   }
