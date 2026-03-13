@@ -1,6 +1,6 @@
 [% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
- <title>Koha: Edifact Enhanced Plugin: Configuration</title>
+ <title>Koha: Edifact Whitehots Plugin: Configuration</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 <script type="text/javascript">
@@ -40,7 +40,7 @@ function check_if_buyer_san_use_library_ean_split_first_part() {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a> &rsaquo; Edifact Enhanced &rsaquo; Configuration</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a> &rsaquo; Edifact Whitehots &rsaquo; Configuration</div>
 
 <div id="doc3">
     [% IF missing_modules %]
