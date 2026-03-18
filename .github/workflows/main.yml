@@ -19,18 +19,18 @@ jobs:
 
     steps:
     - name: Checkout plugin code
-      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-enhanced' }}
+      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-whitehots' }}
       uses: actions/checkout@v4
 
     - name: Get Koha Version Branch Name
-      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-enhanced' }}
+      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-whitehots' }}
       id: koha-version
       uses: "bywatersolutions/github-action-koha-get-version-by-label@v2"
       with:
         version-label: "${{ matrix.koha-version }}"
 
     - name: Set up environment variables
-      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-enhanced' }}
+      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-whitehots' }}
       run: |
         IFS='/' read -r -a parts <<< "$GITHUB_REPOSITORY"
         GITHUB_REPO="${parts[1]}"
@@ -40,13 +40,13 @@ jobs:
         echo "SYNC_REPO=$(pwd)/../kohaclone" >> $GITHUB_ENV
 
     - name: Check out Koha
-      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-enhanced' }}
+      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-whitehots' }}
       run: |
         cd ..
         git clone --branch ${{ env.KOHA_BRANCH }} --single-branch --depth 1 https://github.com/Koha-Community/Koha.git kohaclone
 
     - name: Install koha-testing-docker
-      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-enhanced' }}
+      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-whitehots' }}
       run: |
         cd ..
         git clone https://gitlab.com/koha-community/koha-testing-docker.git
@@ -55,7 +55,7 @@ jobs:
         echo "$(pwd)/bin" >> $GITHUB_PATH
 
     - name: Launch KTD instance with plugins support
-      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-enhanced' }}
+      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-whitehots' }}
       run: |
         cd ../koha-testing-docker
         export LOCAL_USER_ID=$(id -u)
@@ -69,20 +69,20 @@ jobs:
         ktd --name edifact --plugins up -d
 
     - name: Wait for KTD to be ready
-      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-enhanced' }}
+      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-whitehots' }}
       run: |
         cd ../koha-testing-docker
         export KTD_HOME=$(pwd)
         ktd --name edifact --wait-ready 500
 
     - name: Install extra CPAN modules the plugin needs
-      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-enhanced' }}
+      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-whitehots' }}
       run: |
         export KTD_HOME=$(pwd)/../koha-testing-docker
         ktd --name edifact --shell --run "sudo cpanm Business::Barcode::EAN13"
 
     - name: Run plugin tests
-      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-enhanced' }}
+      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-whitehots' }}
       run: |
         export KTD_HOME=$(pwd)/../koha-testing-docker
         ktd --name edifact --shell --run "
@@ -92,7 +92,7 @@ jobs:
         "
 
     - name: Show logs on failure
-      if: ${{ failure() && github.repository == 'bywatersolutions/koha-plugin-edifact-enhanced' }}
+      if: ${{ failure() && github.repository == 'bywatersolutions/koha-plugin-edifact-whitehots' }}
       run: |
         export KTD_HOME=$(pwd)/../koha-testing-docker
         echo "=== KTD instance status ==="
@@ -103,7 +103,7 @@ jobs:
         docker logs edifact-koha-1 --tail 50 || true
 
     - name: Cleanup KTD instance
-      if: ${{ always() && github.repository == 'bywatersolutions/koha-plugin-edifact-enhanced' }}
+      if: ${{ always() && github.repository == 'bywatersolutions/koha-plugin-edifact-whitehots' }}
       run: |
         export KTD_HOME=$(pwd)/../koha-testing-docker
         ktd --name edifact down || true
@@ -122,7 +122,7 @@ jobs:
         fetch-depth: 0
 
     - name: Run rebase_branches.pl
-      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-enhanced' }}
+      if: ${{ github.repository == 'bywatersolutions/koha-plugin-edifact-whitehots' }}
       run: TAG=${GITHUB_REF##*/} ./rebase_branches.pl
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
