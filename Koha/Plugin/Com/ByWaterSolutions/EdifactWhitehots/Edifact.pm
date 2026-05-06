@@ -1,4 +1,4 @@
-package Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::Edifact;
+package Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::Edifact;
 
 # Copyright 2014 PTFS-Europe Ltd
 #
@@ -22,8 +22,8 @@ use warnings;
 use File::Slurp;
 use Carp;
 use Encode qw( from_to );
-use Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::Edifact::Segment;
-use Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::Edifact::Message;
+use Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::Edifact::Segment;
+use Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::Edifact::Message;
 
 my $separator = {
     component => q{\:},
@@ -174,7 +174,7 @@ sub message_array {
         elsif ( $seg->tag eq 'UNT' ) {
             $in_msg = 0;
             if ( @{$msg} ) {
-                push @{$msg_arr}, Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::Edifact::Message->new($msg);
+                push @{$msg_arr}, Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::Edifact::Message->new($msg);
                 $msg = [];
             }
         }
@@ -229,7 +229,7 @@ sub segmentize {
         my $cap = $1;
         $cap =~ s/^\s*//; # Remove any newlines at start of string
         next unless $cap =~ /[[:print:]]/; # Filter out empty segments
-        push @segmented, Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::Edifact::Segment->new( { seg_string => $cap } );
+        push @segmented, Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::Edifact::Segment->new( { seg_string => $cap } );
     }
     return \@segmented;
 }

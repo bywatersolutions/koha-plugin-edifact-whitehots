@@ -19,9 +19,9 @@ use Modern::Perl;
 
 use Test::More tests => 5;
 
-use Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::Edifact::Segment;
+use Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::Edifact::Segment;
 
-my $class = 'Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::Edifact::Segment';
+my $class = 'Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::Edifact::Segment';
 
 subtest 'tag and simple element parsing' => sub {
     plan tests => 4;
@@ -63,7 +63,7 @@ subtest 'as_string round-trips parsed segment' => sub {
 subtest 'de_escape removes EDIFACT release character' => sub {
     plan tests => 4;
 
-    my $de_escape = \&Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::Edifact::Segment::de_escape;
+    my $de_escape = \&Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::Edifact::Segment::de_escape;
 
     # ?+ ?: ?' ?? are the four escape sequences
     is( $de_escape->('foo?+bar'), 'foo+bar', 'escaped + de-escaped' );
