@@ -26,15 +26,15 @@ use t::lib::TestBuilder;
 use Koha::Acquisition::Orders;
 use Koha::Database;
 use Koha::Items;
-use Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced;
-use Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::Edifact::Order;
+use Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots;
+use Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::Edifact::Order;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 sub _new_plugin {
     my (%settings) = @_;
-    my $plugin = Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced->new(
+    my $plugin = Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots->new(
         { enable_plugins => 1, cgi => CGI->new } );
     $plugin->store_data( \%settings );
     return $plugin;
@@ -118,7 +118,7 @@ sub _build_order_fixture {
 
 sub _build_edifact_order {
     my ( $plugin, $vendor, $sender_ean, $orderline ) = @_;
-    return Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::Edifact::Order
+    return Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::Edifact::Order
         ->new(
         {
             orderlines => [$orderline],
