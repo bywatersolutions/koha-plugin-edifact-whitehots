@@ -25,7 +25,7 @@ use t::lib::TestBuilder;
 
 use Koha::Database;
 use Koha::Items;
-use Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced;
+use Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -95,7 +95,7 @@ sub _build_order_with_items {
 
 sub _new_plugin {
     my (%settings) = @_;
-    my $plugin = Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced->new(
+    my $plugin = Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots->new(
         { enable_plugins => 1, cgi => CGI->new } );
     $plugin->store_data( \%settings ) if %settings;
     return $plugin;
@@ -114,7 +114,7 @@ subtest 'updates dateaccessioned and booksellerid for each received item' => sub
 
     my $plugin = _new_plugin( no_update_item_price => '1' );    # update_neither
 
-    Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::_receipt_items(
+    Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::_receipt_items(
         $plugin, $schema,
         t::InvLine->new( quantity => 1 ),
         $order->ordernumber
@@ -145,7 +145,7 @@ subtest 'no_update_item_price update_both copies order prices to item' => sub {
 
     my $plugin = _new_plugin( no_update_item_price => '0' );    # update_both
 
-    Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::_receipt_items(
+    Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::_receipt_items(
         $plugin, $schema,
         t::InvLine->new( quantity => 1 ),
         $order->ordernumber
@@ -175,7 +175,7 @@ subtest 'set_nfl_on_receipt sets notforloan' => sub {
         set_nfl_on_receipt   => '7',
     );
 
-    Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::_receipt_items(
+    Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::_receipt_items(
         $plugin, $schema,
         t::InvLine->new( quantity => 1 ),
         $order->ordernumber
@@ -193,7 +193,7 @@ subtest 'set_nfl_on_receipt sets notforloan' => sub {
         no_update_item_price => '1',
         set_nfl_on_receipt   => q{},
     );
-    Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::_receipt_items(
+    Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::_receipt_items(
         $plugin2, $schema,
         t::InvLine->new( quantity => 1 ),
         $order2->ordernumber
@@ -220,7 +220,7 @@ subtest 'lin_use_item_field_clear_on_invoice clears the configured column' => su
         lin_use_item_field_clear_on_invoice => '1',
     );
 
-    Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::_receipt_items(
+    Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::_receipt_items(
         $plugin, $schema,
         t::InvLine->new( quantity => 1 ),
         $order->ordernumber
@@ -244,7 +244,7 @@ subtest 'add_itemnote_on_receipt stamps the itemnote' => sub {
         add_itemnote_on_receipt => '1',
     );
 
-    Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::_receipt_items(
+    Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::_receipt_items(
         $plugin, $schema,
         t::InvLine->new( quantity => 1 ),
         $order->ordernumber
@@ -273,7 +273,7 @@ subtest 'caps received items at the invoice line quantity' => sub {
         add_itemnote_on_receipt => '1',
     );
 
-    Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::_receipt_items(
+    Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::_receipt_items(
         $plugin, $schema,
         t::InvLine->new( quantity => 2 ),
         $order->ordernumber
@@ -296,7 +296,7 @@ subtest 'caps received items at the invoice line quantity' => sub {
     # without dying.
     my ( $order2, $items2 ) = _build_order_with_items( count => 1 );
     eval {
-        Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::_receipt_items(
+        Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::_receipt_items(
             $plugin, $schema,
             t::InvLine->new( quantity => 5 ),
             $order2->ordernumber
