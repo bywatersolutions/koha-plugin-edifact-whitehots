@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 6;
 
-use Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::Edifact;
+use Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::Edifact;
 
 # A small INVOIC interchange with two LINs and several MOAs at the
 # message-summary level. Built inline so the test is self-contained
@@ -51,11 +51,11 @@ my $invoic = join q{},
     q{'UNT+19+00001},
     q{'UNZ+1+0000000001'};
 
-my $edi = Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::Edifact->new(
+my $edi = Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::Edifact->new(
     { transmission => $invoic } );
 my ($msg) = @{ $edi->message_array };
 isa_ok( $msg,
-    'Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::Edifact::Message',
+    'Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::Edifact::Message',
     'message_array returned a Message object' );
 
 subtest 'header / BGM / DTM accessors' => sub {
@@ -109,12 +109,12 @@ subtest 'shipment_charge sums per plugin shipment_charges_moa_* settings' => sub
     my $stub_plugin = sub {
         my %settings = @_;
         bless { _settings => \%settings },
-            'Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::TestStub';
+            'Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::TestStub';
     };
 
     {
         no strict 'refs';
-        *{'Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced::TestStub::retrieve_data'}
+        *{'Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots::TestStub::retrieve_data'}
             = sub { $_[0]->{_settings}->{ $_[1] } };
     }
 
