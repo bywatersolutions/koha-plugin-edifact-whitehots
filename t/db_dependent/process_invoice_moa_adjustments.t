@@ -28,7 +28,7 @@ use Koha::Acquisition::Invoice::Adjustments;
 use Koha::Acquisition::Invoices;
 use Koha::Database;
 use Koha::Plugins;
-use Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced;
+use Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -38,7 +38,7 @@ my $builder = t::lib::TestBuilder->new;
 # table. InstallPlugins walks every dir under pluginsdir though, which is
 # slow and noisy on the kohadev image — so do it once here.
 Koha::Plugins->new( { enable_plugins => 1 } )->InstallPlugins(
-    { include => ['Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced'] } );
+    { include => ['Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots'] } );
 
 # Minimal INVOIC interchange. No LIN segments, so process_invoice doesn't
 # need any matching aqorders. Three MOAs at the message-summary level
@@ -65,7 +65,7 @@ sub _invoic_string {
 
 sub _new_plugin {
     my (%settings) = @_;
-    my $plugin = Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced->new(
+    my $plugin = Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots->new(
         { enable_plugins => 1, cgi => CGI->new } );
     $plugin->store_data( \%settings ) if %settings;
     return $plugin;
@@ -88,7 +88,7 @@ sub _build_invoice_message {
                 description       => 'TEST',
                 vendor_id         => $vendor->id,
                 file_transport_id => $file_transport->{file_transport_id},
-                plugin            => 'Koha::Plugin::Com::ByWaterSolutions::EdifactEnhanced',
+                plugin            => 'Koha::Plugin::Com::ByWaterSolutions::EdifactWhitehots',
                 san               => $san,
                 shipment_budget   => undef,
             }

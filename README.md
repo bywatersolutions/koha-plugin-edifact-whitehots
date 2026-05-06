@@ -1,4 +1,4 @@
-# Koha Enhanced Edifact Plugin
+# Koha Whitehots Edifact Plugin
 
 A Koha Edifact plugin that replicates the existing Edifact behavior with additional options. 
 This plugin is depends on code that was made available in the 16.05 release of Koha.
