@@ -103,6 +103,8 @@ sub download_messages {
         my $filename = $file->{filename};
         $filename = ( split /\s+/, $filename )[-1];    # Fix for bug in Koha/File/Transport/FTP.pm where filename has more than just the filename
 
+        next if $filename =~ /^\.\.?$/; # Skip . and ..
+
         if ( $file_ext eq q{} || $filename =~ m/[.]$file_ext$/i ) {
             logaction(
                 "EDIFACT",
