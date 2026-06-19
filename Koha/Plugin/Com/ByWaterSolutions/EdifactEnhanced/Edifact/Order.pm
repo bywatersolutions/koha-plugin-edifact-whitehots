@@ -92,7 +92,11 @@ sub filename {
         return;
     }
     my $filename = 'ordr' . $self->{basket}->basketno;
+
+    # The field holds the bare suffix; we add the separating period ourselves,
+    # so strip any leading period the user may have stored
     my $suffix = $self->{plugin}->retrieve_data('order_file_suffix');
+    $suffix =~ s/^\.+// if defined $suffix;
     $filename .= ".$suffix" if $suffix;
     return $filename;
 }

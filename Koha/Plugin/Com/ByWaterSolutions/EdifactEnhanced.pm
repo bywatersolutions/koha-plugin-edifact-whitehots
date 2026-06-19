@@ -758,6 +758,11 @@ sub configure {
             invoice_adjustment_rules                       => $cgi->param('invoice_adjustment_rules') || '[]',
         };
 
+        # These fields hold the bare file suffix; the order/invoice code adds
+        # the separating period itself, so strip any leading period the user
+        # entered to avoid a doubled period ( orders ) or a broken match regex ( invoices )
+        $new_settings->{$_} =~ s/^\.+// for qw( order_file_suffix invoice_file_suffix );
+
         logaction(
             "EDIFACT",
             "SETTINGS_UPDATED",

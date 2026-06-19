@@ -286,13 +286,18 @@ sub _get_file_ext {
     my $self = shift;
     my $type = shift;
 
+    # The field holds the bare suffix; the download regex supplies the leading
+    # period itself, so strip any leading period the user may have stored
+    my $invoice_suffix = $self->{plugin}->retrieve_data('invoice_file_suffix') // q{};
+    $invoice_suffix =~ s/^\.+//;
+
     # Extension format
     # 1st char Status C = Ready For pickup A = Completed E = Extracted
     # 2nd Char Standard E = Edifact
     # 3rd Char Type of message
     my %file_types = (
         QUOTE   => 'CEQ',
-        INVOICE => $self->{plugin}->retrieve_data('invoice_file_suffix') || q{},
+        INVOICE => $invoice_suffix,
         ORDRSP  => 'CEA',
         ALL     => 'CE.',
     );
