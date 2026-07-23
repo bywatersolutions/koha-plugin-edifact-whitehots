@@ -137,8 +137,15 @@ sub download_messages {
                 my $processed_name = $filename;
                 substr $processed_name, -3, 1, 'E';
 
-                # Mark file as processed using the transport's rename functionality
-                $self->{file_transport}->rename_file( $filename, $processed_name );
+                # Some vendors name files with a suffix that already starts with 'E'
+                # ( Ingram uses .EIN ), making this rename a no-op; their servers
+                # reject it with 'already exists', which also aborts the connection
+                # and flags the transport status as an error
+                if ( $processed_name ne $filename ) {
+
+                    # Mark file as processed using the transport's rename functionality
+                    $self->{file_transport}->rename_file( $filename, $processed_name );
+                }
             } else {
                 carp "Failed to download file: $filename";
             }
