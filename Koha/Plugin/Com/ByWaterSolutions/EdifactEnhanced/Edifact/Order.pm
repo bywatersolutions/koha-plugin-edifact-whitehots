@@ -429,33 +429,38 @@ sub order_line {
         if ($aqorder_item) {
             my $itemnumber = $aqorder_item->itemnumber;
             my $item       = Koha::Items->find($itemnumber);
-            my $value      = $item->unblessed->{$lin_use_item_field};
-            $line_item_field_value = $value if $value;
 
-            # Add the ISBN to the record
-            # FIXME: Make this optional, and allow the field/subfield to be configuratable.
-            #        The value we are using is not necessarily an ISBN
-            my @fields      = $record->field('020');
-            my $match_found = 0;
-            my $last_isbn_field;
+            # The aqorders_items row is not removed when an item is deleted,
+            # so the item may no longer exist
+            if ($item) {
+                my $value = $item->unblessed->{$lin_use_item_field};
+                $line_item_field_value = $value if $value;
 
-            foreach my $f (@fields) {
-                $last_isbn_field = $f;
-                my $isbn = $f->subfield('a');
-                $match_found = 1 if ( index( $isbn, $value ) != -1 );
-            }
+                # Add the ISBN to the record
+                # FIXME: Make this optional, and allow the field/subfield to be configuratable.
+                #        The value we are using is not necessarily an ISBN
+                my @fields      = $record->field('020');
+                my $match_found = 0;
+                my $last_isbn_field;
 
-            if ( !$match_found ) {
-                my $field = MARC::Field->new( '020', '', '', 'a' => $value );
-
-                if ($last_isbn_field) {
-                    $record->insert_fields_after( $last_isbn_field, $field );
-                } else {
-                    $record->append_fields($field);
+                foreach my $f (@fields) {
+                    $last_isbn_field = $f;
+                    my $isbn = $f->subfield('a');
+                    $match_found = 1 if ( index( $isbn, $value ) != -1 );
                 }
 
-                my $bibliodata = GetBiblioData($biblionumber);
-                ModBiblio( $record, $biblionumber, $bibliodata->{frameworkcode} );
+                if ( !$match_found ) {
+                    my $field = MARC::Field->new( '020', '', '', 'a' => $value );
+
+                    if ($last_isbn_field) {
+                        $record->insert_fields_after( $last_isbn_field, $field );
+                    } else {
+                        $record->append_fields($field);
+                    }
+
+                    my $bibliodata = GetBiblioData($biblionumber);
+                    ModBiblio( $record, $biblionumber, $bibliodata->{frameworkcode} );
+                }
             }
         }
     }

@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use CGI;
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -175,6 +175,36 @@ subtest 'orderline WITH item uses the configured field as LIN id' => sub {
         qr/^LIN\+1\+\+INTERNAL-LIN-XYZ:IB'/,
         'LIN id_string/code come from the configured item field'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'orderline whose item was deleted does not die' => sub {
+    plan tests => 2;
+    $schema->storage->txn_begin;
+    t::lib::Mocks::mock_preference( 'AcqCreateItem', 'cataloguing' );
+
+    my $plugin = _new_plugin(
+        lin_use_item_field           => 'itemnotes_nonpublic',
+        lin_use_item_field_qualifier => 'IB',
+        lin_use_isbn                 => '0',
+        lin_use_ean                  => '0',
+    );
+    my ( $vendor, $sender_ean, $orderline ) = _build_order_fixture( with_item => 1 );
+
+    # Deleting an item does not remove its aqorders_items row, so the
+    # orderline still points at the now missing itemnumber
+    my ($aqorder_item) = $orderline->aqorders_items;
+    Koha::Items->find( $aqorder_item->itemnumber )->delete;
+
+    my $edi_order = _build_edifact_order( $plugin, $vendor, $sender_ean, $orderline );
+
+    eval { $edi_order->order_line( 1, $orderline ); 1 }
+        or diag("order_line died: $@");
+    ok( !$@, 'order_line returns cleanly when the item no longer exists' );
+
+    my $lin_seg = ( grep { /^LIN\+/ } @{ $edi_order->{segs} } )[0];
+    ok( defined $lin_seg, 'a LIN segment was still emitted' );
 
     $schema->storage->txn_rollback;
 };
